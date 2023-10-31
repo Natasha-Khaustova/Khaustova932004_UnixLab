@@ -8,6 +8,9 @@ fi
 
 START_FILE="$1"
 TEMP_DIR=$(mktemp -d)
+FILE_DIRECTORY=$(dirname "$START_FILE")
+	cp "$START_FILE" "$TEMP_DIR/"
+	cd "$TEMP_DIR"
 
 exit_signal() {
     rm -rf "$TEMP_DIR"
@@ -27,7 +30,6 @@ OUTPUT_FILE=$(grep -o "&Output::[^ ]*" "$START_FILE" | sed 's/&Output::\(.*\)/\1
 }
 create_out_file
 
-FILE_DIRECTORY=$(dirname "$START_FILE")
 
 compile_file() {
 	
@@ -38,19 +40,22 @@ compile_file() {
         echo "Error! Incorrect file type"
         exit 4
     fi
-
+	cd "$FILE_DIRECTORY"
+	
 }
 
 compile_file
 
 # Перемещение выходного файла рядом с исходным файлом
 push_out_file() {
-	
-    mv "$TEMP_DIR/$OUTPUT_FILE" "$(dirname "$START_FILE")/$OUTPUT_FILE"
+TARGET_DIRECTORY="/home/natali/UnixLab/lab1"
+TEMP_OUTPUT_FILE="$TEMP_DIR/$OUTPUT_FILE"
 
-	rm -rf "$TEMP_DIR"
-	
-    echo "Success! Output: $(dirname "$START_FILE")/$OUTPUT_FILE"
+    # Переместить выходной файл в целевую директорию
+    mv "$TEMP_OUTPUT_FILE" "$TARGET_DIRECTORY/$OUTPUT_FILE"
+
+    rm -rf "$TEMP_DIR"
+    echo "Success! Output: $(pwd)/$OUTPUT_FILE"
 }
 
 push_out_file
