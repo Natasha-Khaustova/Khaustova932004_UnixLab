@@ -1,8 +1,6 @@
 FROM ubuntu:latest
 
-VOLUME /var/lib/docker/volumes/my_volume/flock
-
-WORKDIR /var/lib/docker/volumes/my_volume/flock
+WORKDIR /flock
 
 COPY dockerLab.sh /dockerLab.sh
 
